@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Upload Data - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+    <h1>Upload Your Data</h1>
+    <p>Drag and drop your CSV file here or click to browse.</p>
+    
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="upload-form">
+        <div class="upload-area" id="upload-area">
+            <img src="{{ url_for('static', filename='images/icon-upload.png') }}" alt="Upload Icon" class="upload-icon">
+            <input type="file" id="file-input" name="file" accept=".csv" required>
+            <label for="file-input" class="browse-btn">Browse Files</label>
+            <span id="file-name-display">No file selected</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-process">Upload & Analyze</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const fileInput = document.getElementById('file-input');
+    const fileNameDisplay = document.getElementById('file-name-display');
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = fileInput.files[0].name;
+        } else {
+            fileNameDisplay.textContent = 'No file selected';
+        }
+    });
+</script>
+{% endblock %}

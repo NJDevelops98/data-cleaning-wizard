@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- The title will be set by each individual page -->
+    <title>{% block title %}Data Cleaning Wizard{% endblock %}</title>
+    
+    <!-- All CSS and Font links go in this one master file -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="card-container">
+    
+        <!-- ========== HEADER (Defined only ONCE, here!) ========== -->
+        <header class="navbar">
+            <div class="nav-logo">
+                <!-- Make sure you have a logo.png in your static/images folder -->
+                <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Wizard Logo">
+                <a href="{{ url_for('home') }}">Data Cleaning Wizard</a>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' else '' }}">Home</a></li>
+                    <li><a href="{{ url_for('upload') }}" class="{{ 'active' if request.endpoint == 'upload' else '' }}">Upload Data</a></li>
+                    <li><a href="{{ url_for('modules') }}" class="{{ 'active' if 'module_' in request.endpoint or request.endpoint == 'modules' else '' }}">Modules</a></li>
+                    <li><a href="{{ url_for('pipeline_run') }}" class="{{ 'active' if 'pipeline_' in request.endpoint else '' }}">Pipeline</a></li>
+                    <li><a href="{{ url_for('export_page') }}" class="{{ 'active' if request.endpoint == 'export_page' else '' }}">Export</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- ========== MAIN CONTENT AREA ========== -->
+        <main class="main-content">
+            
+            <!-- This block will display flashed messages from the server -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- This is the placeholder that each page's unique content will fill -->
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+        <!-- ========== FOOTER (Defined only ONCE, here!) ========== -->
+        <footer class="page-footer">
+            <div class="footer-copyright">
+                © Neeraj Jindal
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </footer>
+
+    </div> <!-- End of the main card-container -->
+
+    <!-- This is a placeholder for any page-specific JavaScript -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

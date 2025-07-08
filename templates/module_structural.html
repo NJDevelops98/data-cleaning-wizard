@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block title %}Fix Structural Errors - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🔧 Fix Structural Errors</h2>
+    <p>Correct common structural issues like unwanted rows, columns, or incorrect headers.</p>
+    
+    <form action="{{ url_for('module_structural_action') }}" method="post" class="module-form">
+        
+        <!-- Section 1: Blank Rows & Columns -->
+        <fieldset>
+            <legend>Part 1: Remove Blank Rows & Columns</legend>
+            {% if blank_rows > 0 %}
+            <div class="form-option checkbox-option">
+                <input type="checkbox" id="drop_blank_rows" name="drop_blank_rows" value="yes">
+                <label for="drop_blank_rows">Drop <strong>{{ blank_rows }}</strong> fully blank row(s).</label>
+            </div>
+            {% endif %}
+            {% if blank_cols_count > 0 %}
+            <div class="form-option checkbox-option">
+                <input type="checkbox" id="drop_blank_cols" name="drop_blank_cols" value="yes">
+                <label for="drop_blank_cols">Drop <strong>{{ blank_cols_count }}</strong> fully blank column(s): <code>{{ blank_cols_list|join(', ') }}</code></label>
+            </div>
+            {% endif %}
+            {% if blank_rows == 0 and blank_cols_count == 0 %}
+            <p class="success-message small-message">✅ No fully blank rows or columns found.</p>
+            {% endif %}
+        </fieldset>
+
+        <hr class="section-divider">
+
+        <!-- Section 2: Remove Specific Rows -->
+        <fieldset>
+            <legend>Part 2: Remove Specific Rows by Index</legend>
+            <p class="form-description">Remove unwanted header or footer rows. Enter indices separated by commas (e.g., 0, 5, 8) or as ranges (e.g., 0-2, 10-12).</p>
+            <div class="form-option">
+                <label for="rows_to_remove">Indices to remove:</label>
+                <input type="text" id="rows_to_remove" name="rows_to_remove" placeholder="e.g., 0, 5-7" class="form-input full-width-input">
+            </div>
+        </fieldset>
+
+        <hr class="section-divider">
+        
+        <!-- Section 3: Set New Header -->
+        <fieldset>
+            <legend>Part 3: Set Header from a Data Row</legend>
+            <p class="form-description">If your true headers are in a data row, select its index here. This will promote that row to be the new header and delete it from the data.</p>
+            <div class="form-option">
+                <label for="header_row_index">Use row index as new header:</label>
+                <input type="number" id="header_row_index" name="header_row_index" min="0" max="{{ num_rows - 1 }}" placeholder="e.g., 1" class="form-input small-input">
+            </div>
+        </fieldset>
+        
+        <button type="submit" class="btn btn-primary btn-process">Apply All Changes</button>
+    </form>
+</div>
+{% endblock %}

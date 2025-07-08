@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}Welcome - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+    <section class="hero-section">
+        <h1>Welcome to Data Cleaning Wizard!</h1>
+        <p>Easily clean and preprocess your data with our powerful tools.</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('upload') }}" class="btn btn-primary">Upload CSV</a>
+            <a href="{{ url_for('demo') }}" class="btn btn-secondary">View Demo</a>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <section class="modules-preview">
+        <div class="module-card">
+            <div class="card-icon-background">
+                <img src="{{ url_for('static', filename='images/icon-missing.png') }}" alt="Missing Data Icon">
+            </div>
+            <h2>Handle Missing Data</h2>
+            <p>Find and fill or remove empty values from your dataset.</p>
+        </div>
+        <div class="module-card">
+            <div class="card-icon-background">
+                <img src="{{ url_for('static', filename='images/icon-duplicates.png') }}" alt="Duplicates Icon">
+            </div>
+            <h2>Handle Duplicates</h2>
+            <p>Identify and remove identical rows to ensure data integrity.</p>
+        </div>
+    </section>
+{% endblock %}

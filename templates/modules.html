@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}Cleaning Modules - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="modules-page-container">
+    <h2>Choose a Cleaning Module</h2>
+    <p>Select an operation to perform on your data. After each operation, you will return to this page.</p>
+    <div class="module-card-grid">
+        <a href="{{ url_for('module_missing_data_options') }}" class="module-select-card"><img src="{{ url_for('static', filename='images/icon-missing.png') }}" alt=""><h3>🧩 Handle Missing Data</h3><p>Find and fill or remove empty values.</p></a>
+        <a href="{{ url_for('module_duplicates_options') }}" class="module-select-card"><img src="{{ url_for('static', filename='images/icon-duplicates.png') }}" alt=""><h3>📋 Handle Duplicates</h3><p>Identify and remove identical rows.</p></a>
+        <a href="{{ url_for('module_datatypes_options') }}" class="module-select-card"><img src="{{ url_for('static', filename='images/icon-types.png') }}" alt=""><h3>"123" Correct Data Types</h3><p>Ensure each column is text, number, etc.</p></a>
+        <a href="{{ url_for('module_categorical_options') }}" class="module-select-card"><img src="{{ url_for('static', filename='images/icon-categories.png') }}" alt=""><h3>🏷️ Standardize Categories</h3><p>Fix inconsistencies like "USA" vs "U.S.A".</p></a>
+        <a href="{{ url_for('module_outliers_options') }}" class="module-select-card"><img src="{{ url_for('static', filename='images/icon-outliers.png') }}" alt=""><h3>🎯 Handle Outliers</h3><p>Manage unusual numeric values.</p></a>
+        <a href="{{ url_for('module_structural_options') }}" class="module-select-card"><img src="{{ url_for('static', filename='images/icon-structural.png') }}" alt=""><h3>🔧 Fix Structural Errors</h3><p>Remove blank rows/cols, fix headers.</p></a>
+        <a href="{{ url_for('module_irrelevant_options') }}" class="module-select-card"><img src="{{ url_for('static', filename='images/icon-irrelevant.png') }}" alt=""><h3>🗑️ Remove Irrelevant Data</h3><p>Filter out unneeded columns or rows.</p></a>
+        <a href="{{ url_for('module_text_formatting_options') }}" class="module-select-card"><img src="{{ url_for('static', filename='images/icon-formatting.png') }}" alt=""><h3>Aa Format Text Data</h3><p>Trim whitespace, remove special chars.</p></a>
+    </div>
+</div>
+{% endblock %}

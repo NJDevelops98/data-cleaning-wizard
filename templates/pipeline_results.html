@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}Pipeline Results - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🚀 Pipeline Complete!</h2>
+    <p>The wizard has applied your approved actions:</p>
+    <div class="log-box">
+        <ul>
+            {% for item in log %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <h3>Preview of Final Cleaned Data</h3>
+    <p>Your cleaned data now has <strong>{{ num_rows }}</strong> rows and <strong>{{ num_cols }}</strong> columns.</p>
+    <div class="table-preview">{{ table_html | safe }}</div>
+    <hr class="section-divider">
+    <h3>Download Your Cleaned Data</h3>
+    <p>Your final file is ready. Click the button below to download it as a CSV file.</p>
+    <a href="{{ url_for('download_pipeline_file') }}" class="btn btn-primary btn-process" download="pipeline_cleaned_{{ session.get('filename', 'data.csv') }}">Download Cleaned CSV</a>
+</div>
+{% endblock %}

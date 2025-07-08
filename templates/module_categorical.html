@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}Standardize Categories - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🏷️ Standardize Categorical Data</h2>
+    
+    {% if categorical_cols %}
+    <p>Review the following text columns and apply standardization rules.</p>
+    <form action="{{ url_for('module_categorical_action') }}" method="post" class="module-form">
+        
+        {% for col in categorical_cols %}
+        <fieldset class="column-fieldset">
+            <legend>Column: <code>{{ col.name }}</code> ({{ col.unique_count }} unique values)</legend>
+
+            <!-- Part 1: Whitespace & Case -->
+            <div class="sub-fieldset">
+                <div class="sub-legend">Quick Fixes</div>
+                <div class="form-option checkbox-option">
+                    <input type="checkbox" id="trim-{{ col.name }}" name="trim-{{ col.name }}" value="yes" checked>
+                    <label for="trim-{{ col.name }}">Trim leading/trailing whitespace.</label>
+                </div>
+                <div class="form-option">
+                    <label for="case-{{ col.name }}">Standardize case to:</label>
+                    <select name="case-{{ col.name }}" id="case-{{ col.name }}" class="form-select">
+                        <option value="none">No Change</option>
+                        <option value="lower">lowercase</option>
+                        <option value="upper">UPPERCASE</option>
+                        <option value="title">Title Case</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Part 2: Manual Value Mapping -->
+            <div class="sub-fieldset">
+                <div class="sub-legend">Value Mapping (Optional)</div>
+                <p class="form-description">Combine similar values. For each original value, provide a new value to map it to. Leave blank to keep the original.</p>
+                <div class="mapping-table">
+                    <div class="mapping-header">
+                        <div>Original Value</div>
+                        <div>New Value</div>
+                    </div>
+                    {% for val in col.unique_values %}
+                    <div class="mapping-row">
+                        <div class="original-value">{{ val }}</div>
+                        <div><input type="text" name="map-{{ col.name }}-{{ val }}" class="form-input" placeholder="Enter new value..."></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </fieldset>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary btn-process">Apply All Changes</button>
+    </form>
+    {% else %}
+        <p class="success-message">✅ No text-based (categorical) columns with a reasonable number of unique values were found to standardize.</p>
+        <a href="{{ url_for('modules') }}" class="btn btn-secondary">Back to Modules</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}Customize Pipeline - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🚀 Customize Pipeline Actions</h2>
+    <p>Review each finding and adjust the recommended action as needed.</p>
+    <form action="{{ url_for('pipeline_apply_manual') }}" method="post" class="module-form">
+        <fieldset>
+            <legend>Recommended Actions</legend>
+            <div class="pipeline-actions-list">
+            {% for finding in findings %}
+                <div class="pipeline-action-item">
+                    <div class="finding-description">{{ finding.description }}</div>
+                    <div class="action-control">
+                        <input type="hidden" name="action_type-{{ loop.index0 }}" value="{{ finding.type }}">
+                        <input type="hidden" name="column-{{ loop.index0 }}" value="{{ finding.column if finding.column else '' }}">
+                        <select name="method-{{ loop.index0 }}" class="form-select">
+                            {% for option in finding.options %}
+                            <option value="{{ option.value }}" {% if option.is_default %}selected{% endif %}>{{ option.text }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </fieldset>
+        <button type="submit" class="btn btn-primary btn-process">Confirm & Apply All Actions</button>
+    </form>
+</div>
+{% endblock %}

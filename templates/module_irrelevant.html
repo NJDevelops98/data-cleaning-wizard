@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}Remove Irrelevant Data - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🗑️ Remove Irrelevant Data</h2>
+    <p>Permanently remove columns or rows that are not needed for your analysis.</p>
+    
+    <form action="{{ url_for('module_irrelevant_action') }}" method="post" class="module-form">
+        
+        <!-- Part 1: Remove Columns -->
+        <fieldset>
+            <legend>Part 1: Remove Columns by Name</legend>
+            <p class="form-description">Select one or more columns to permanently delete from the dataset.</p>
+            <div class="column-checkbox-grid">
+                {% for col in all_columns %}
+                <div class="checkbox-option">
+                    <input type="checkbox" name="columns_to_drop" value="{{ col }}" id="col-drop-{{ col }}">
+                    <label for="col-drop-{{ col }}">{{ col }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <hr class="section-divider">
+
+        <!-- Part 2: Filter and Remove Rows -->
+        <fieldset>
+            <legend>Part 2: Filter Rows by a Condition</legend>
+            <p class="form-description">Define a rule to remove rows. For example, remove all rows where 'Country' is equal to 'Canada'. This only applies if you fill out all three fields.</p>
+            <div class="filter-rule">
+                <p>Remove rows where...</p>
+                <div class="filter-inputs">
+                    <select name="filter_column" class="form-select">
+                        <option value="">-- Select Column --</option>
+                        {% for col in all_columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="filter_operator" class="form-select">
+                        <option value="eq">is equal to</option>
+                        <option value="neq">is not equal to</option>
+                        <option value="gt">is greater than</option>
+                        <option value="lt">is less than</option>
+                        <option value="contains">contains</option>
+                        <option value="not_contains">does not contain</option>
+                    </select>
+                    <input type="text" name="filter_value" placeholder="Enter value..." class="form-input">
+                </div>
+            </div>
+        </fieldset>
+        
+        <button type="submit" class="btn btn-primary btn-process">Apply Removals</button>
+    </form>
+</div>
+{% endblock %}

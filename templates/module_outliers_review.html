@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}Handle Outliers - Step 3{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🎯 Reviewing Outliers in: <code>{{ column_name }}</code></h2>
+    <p><strong>Step 3:</strong> Review the found outliers and choose a treatment method.</p>
+    {% if outlier_count > 0 %}
+        <div class="highlight-box">
+            <p>Found <strong>{{ outlier_count }}</strong> potential outlier(s) using the <strong>{{ detect_method }}</strong> method.</p>
+            <p>Calculated bounds: \[{{ '%.2f'|format(lower_bound) }} to {{ '%.2f'|format(upper_bound) }}].</p>
+            <p>Sample outliers found: <code>{{ sample_outliers|join(', ') }}</code></p>
+        </div>
+        <form action="{{ url_for('module_outliers_apply') }}" method="post" class="module-form">
+            <input type="hidden" name="column_to_analyze" value="{{ column_name }}">
+            <input type="hidden" name="detect_method" value="{{ detect_method }}">
+            <input type="hidden" name="lower_bound" value="{{ lower_bound }}">
+            <input type="hidden" name="upper_bound" value="{{ upper_bound }}">
+            <fieldset><legend>How would you like to treat these outliers?</legend>
+                <div class="option-card-grid">
+                    <input type="radio" name="treat_method" id="remove_rows" value="remove_rows" class="hidden-radio" checked><label for="remove_rows" class="option-card"><h3>Remove Rows</h3><p>Delete entire rows where these outliers occur.</p></label>
+                    <input type="radio" name="treat_method" id="cap_values" value="cap_values" class="hidden-radio"><label for="cap_values" class="option-card"><h3>Cap Values</h3><p>Replace outliers with the calculated bounds.</p></label>
+                    <input type="radio" name="treat_method" id="replace_with_nan" value="replace_with_nan" class="hidden-radio"><label for="replace_with_nan" class="option-card"><h3>Replace with NaN</h3><p>Change outlier values to 'missing' for later imputation.</p></label>
+                </div>
+            </fieldset>
+            <button type="submit" class="btn btn-primary btn-process">Apply Treatment</button>
+        </form>
+    {% else %}
+        <p class="success-message">✅ No outliers were detected in '{{ column_name }}' with the selected method.</p>
+        <a href="{{ url_for('module_outliers_options') }}" class="btn btn-secondary">Analyze Another Column</a>
+    {% endif %}
+</div>
+{% endblock %}
+```
+---
+
+

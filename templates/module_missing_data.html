@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block title %}Handle Missing Data - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🧩 Handle Missing Data</h2>
+    
+    {% if total_missing > 0 %}
+    <p>Your dataset has <strong>{{ total_missing }}</strong> missing values. Choose your cleaning actions below.</p>
+    <form action="{{ url_for('module_missing_data_action') }}" method="post" class="module-form">
+        
+        <fieldset>
+            <legend>Part 1: Initial Cleanup</legend>
+            {% if blank_rows > 0 %}
+            <div class="form-option checkbox-option">
+                <input type="checkbox" id="drop_blank_rows" name="drop_blank_rows" value="yes">
+                <label for="drop_blank_rows">Drop <strong>{{ blank_rows }}</strong> fully blank row(s).</label>
+            </div>
+            {% endif %}
+            {% if blank_cols_count > 0 %}
+            <div class="form-option checkbox-option">
+                <input type="checkbox" id="drop_blank_cols" name="drop_blank_cols" value="yes">
+                <label for="drop_blank_cols">Drop <strong>{{ blank_cols_count }}</strong> fully blank column(s): <code>{{ blank_cols_list|join(', ') }}</code></label>
+            </div>
+            {% endif %}
+            <div class="form-option">
+                <label for="threshold">Drop columns with more than... </label>
+                <input type="number" name="threshold" id="threshold" min="0" max="100" placeholder="e.g., 80" class="form-input small-input">
+                <label for="threshold"> % missing values.</label>
+            </div>
+        </fieldset>
+
+        <hr class="section-divider">
+
+        <fieldset>
+            <legend>Part 2: Column-by-Column Imputation</legend>
+            <p class="form-description">Apply a specific method to individual columns. This runs after the initial cleanup.</p>
+            
+            <div class="column-actions-table">
+                {% for col in cols_with_missing %}
+                <div class="column-action-row">
+                    <div class="col-name"><strong>{{ col.name }}</strong><br><small>({{ col.missing }} missing)</small></div>
+                    <div class="col-options">
+                        <select name="method-{{ col.name }}">
+                            <option value="ignore">Do Nothing</option>
+                            <option value="fill_value">Fill with value:</option>
+                            {% if col.is_numeric %}
+                            <option value="fill_mean">Fill with Mean ({{ '%.2f'|format(col.mean) }})</option>
+                            <option value="fill_median">Fill with Median ({{ '%.2f'|format(col.median) }})</option>
+                            {% endif %}
+                            <option value="fill_mode">Fill with Mode ({{ col.mode }})</option>
+                            <option value="ffill">Forward Fill</option>
+                            <option value="bfill">Backward Fill</option>
+                        </select>
+                        <input type="text" name="value-{{ col.name }}" placeholder="Custom" class="form-input small-input">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary btn-process">Apply All Changes</button>
+    </form>
+    {% else %}
+        <p class="success-message">Congratulations! No missing values found in your dataset.</p>
+        <a href="{{ url_for('modules') }}" class="btn btn-secondary">Back to Modules</a>
+    {% endif %}
+</div>
+{% endblock %}

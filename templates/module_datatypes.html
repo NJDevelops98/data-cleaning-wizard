@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}Correct Data Types - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>"123" Correct Data Types</h2>
+    <p>Ensure each column is stored as the correct type (e.g., number, text, date).</p>
+    
+    <form action="{{ url_for('module_datatypes_action') }}" method="post" class="module-form">
+        <fieldset>
+            <legend>Set Data Type for Each Column</legend>
+            <p class="form-description">For each column, select the desired data type. The current type is shown in parentheses.</p>
+            
+            <div class="column-actions-table">
+                {% for col in column_info %}
+                <div class="column-action-row">
+                    <div class="col-name"><strong>{{ col.name }}</strong><br><small>(Current: {{ col.type }})</small></div>
+                    <div class="col-options">
+                        <select name="dtype-{{ col.name }}" class="form-select full-width-select">
+                            <option value="auto">Auto-detect / Keep Current</option>
+                            <option value="text">Text (string)</option>
+                            <option value="integer">Number (integer)</option>
+                            <option value="float">Number (decimal/float)</option>
+                            <option value="datetime">Date/Time</option>
+                        </select>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+        
+        <button type="submit" class="btn btn-primary btn-process">Apply Type Conversions</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}Format Text Data - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>Aa Format Text Data</h2>
+    <p>Apply general formatting rules to clean up your text columns.</p>
+    
+    {% if text_cols %}
+    <form action="{{ url_for('module_text_formatting_action') }}" method="post" class="module-form">
+        
+        <!-- Part 1: Select Columns -->
+        <fieldset>
+            <legend>Part 1: Select Columns to Format</legend>
+            <p class="form-description">Choose one or more text-based columns to apply the formatting rules to.</p>
+            <div class="column-checkbox-grid">
+                {% for col in text_cols %}
+                <div class="checkbox-option">
+                    <input type="checkbox" name="columns_to_format" value="{{ col }}" id="col-{{ col }}">
+                    <label for="col-{{ col }}">{{ col }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <hr class="section-divider">
+
+        <!-- Part 2: Select Actions -->
+        <fieldset>
+            <legend>Part 2: Select Formatting Actions</legend>
+            <p class="form-description">The selected actions will be applied to all chosen columns.</p>
+            <div class="form-option checkbox-option">
+                <input type="checkbox" id="trim_whitespace" name="trim_whitespace" value="yes">
+                <label for="trim_whitespace"><strong>Trim Whitespace:</strong> Remove spaces from the beginning and end of each value.</label>
+            </div>
+            <div class="form-option checkbox-option">
+                <input type="checkbox" id="remove_special" name="remove_special" value="yes">
+                <label for="remove_special"><strong>Remove Special Characters:</strong> Keep only letters, numbers, and spaces.</label>
+            </div>
+            <div class="form-option checkbox-option">
+                <input type="checkbox" id="remove_extra_spaces" name="remove_extra_spaces" value="yes">
+                <label for="remove_extra_spaces"><strong>Consolidate Spaces:</strong> Replace multiple spaces between words with a single space.</label>
+            </div>
+        </fieldset>
+        
+        <button type="submit" class="btn btn-primary btn-process">Apply Formatting</button>
+    </form>
+    {% else %}
+        <p class="success-message">✅ No text-based columns found to format.</p>
+        <a href="{{ url_for('modules') }}" class="btn btn-secondary">Back to Modules</a>
+    {% endif %}
+</div>
+{% endblock %}

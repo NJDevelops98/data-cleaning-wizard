@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}Export Data - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>⬇️ Export Your Cleaned Data</h2>
+    <p>Your data is ready for download. Below is a final preview of the cleaned dataset.</p>
+    
+    <h3>Final Data Preview</h3>
+    <p>Your final dataset has <strong>{{ num_rows }}</strong> rows and <strong>{{ num_cols }}</strong> columns.</p>
+    <div class="table-preview" style="margin-bottom: 2rem;">
+        {{ table_html | safe }}
+    </div>
+
+    <hr class="section-divider">
+
+    <h3>Download Your File</h3>
+    <p>Click the button below to download your cleaned data as a CSV file.</p>
+    <a href="{{ url_for('download_manual_clean_file') }}" class="btn btn-primary btn-process" download="cleaned_{{ filename }}">
+        Download Cleaned CSV
+    </a>
+</div>
+{% endblock %}

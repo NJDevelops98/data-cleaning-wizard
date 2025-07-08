@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Pipeline Summary - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🚀 Automatic Pipeline: Summary of Findings</h2>
+    <p>The wizard has analyzed your data and found the following potential issues.</p>
+    {% if findings %}
+    <div class="log-box">
+        <ul>
+            {% for finding in findings %}
+                <li>{{ finding.description }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <p class="form-description" style="text-align: center; margin-top: 2rem;">How would you like to proceed?</p>
+    <div class="choice-grid">
+        <form action="{{ url_for('pipeline_apply_defaults') }}" method="post" style="display: contents;">
+            <button type="submit" class="choice-card">
+                <h3>Apply Recommended Fixes</h3>
+                <p>Automatically apply all smart defaults in one click.</p>
+            </button>
+        </form>
+        <a href="{{ url_for('pipeline_manual_options') }}" class="choice-card">
+            <h3>Make Manual Changes</h3>
+            <p>Review each finding and customize the cleaning action.</p>
+        </a>
+    </div>
+    {% else %}
+        <p class="success-message">✅ No cleaning actions were detected. Your data looks clean!</p>
+        <a href="{{ url_for('analysis') }}" class="btn btn-secondary">Back to Analysis</a>
+    {% endif %}
+</div>
+{% endblock %}

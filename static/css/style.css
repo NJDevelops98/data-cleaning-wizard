@@ -1,0 +1,257 @@
+/* =================================================================== */
+/* ========== 1. GLOBAL STYLES & CSS VARIABLES (SETTINGS) ========== */
+/* =================================================================== */
+:root {
+    --primary-color: #26a69a;
+    --secondary-color: #ffca28;
+    --text-dark: #212529;
+    --text-light: #6c757d;
+    --container-bg: #ffffff; 
+    --border-color: #e9ecef;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    --font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+    font-family: var(--font-family);
+    background: linear-gradient(to bottom right, #e6f7ff, #f4f7f6);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* =================================================================== */
+/* ========== 2. THE MAIN LAYOUT CONTAINER (THE BIG CARD) ========== */
+/* =================================================================== */
+.card-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 4rem auto;
+    background-color: var(--container-bg);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    padding: 2.5rem 3rem;
+}
+
+/* =================================================================== */
+/* ========== 3. HEADER AND NAVIGATION BAR STYLES ========== */
+/* =================================================================== */
+.navbar { display: flex; justify-content: space-between; align-items: center; }
+.nav-logo { display: flex; align-items: center; gap: 12px; }
+.nav-logo a { font-weight: 600; font-size: 1.2rem; color: var(--text-dark); text-decoration: none; }
+.nav-links { display: flex; list-style-type: none; gap: 2.5rem; }
+.nav-links a { font-weight: 500; color: var(--text-dark); text-decoration: none; transition: color 0.3s ease; }
+.nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
+
+/* =================================================================== */
+/* ========== 4. SHARED AND HOMEPAGE-SPECIFIC STYLES ========== */
+/* =================================================================== */
+.main-content { padding: 2rem 0; }
+.section-divider { border: none; height: 1px; background-color: var(--border-color); margin: 3rem 0; }
+.hero-section { text-align: center; padding: 2rem 0 3rem 0; }
+.hero-section h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 1rem; }
+.hero-section p { font-size: 1.1rem; color: var(--text-light); margin-bottom: 2.5rem; }
+.hero-buttons { display: flex; justify-content: center; gap: 1rem; }
+.btn { padding: 14px 32px; border: none; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; }
+.btn:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+.btn-primary { background-color: var(--primary-color); color: white; }
+.btn-secondary { background-color: var(--secondary-color); color: var(--text-dark); }
+.modules-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.module-card { border: 1px solid var(--border-color); border-radius: 16px; padding: 2.5rem 2rem; text-align: center; transition: all 0.3s ease; }
+.module-card:hover { transform: translateY(-5px); border-color: var(--primary-color); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.card-icon-background { width: 70px; height: 70px; border-radius: 50%; margin: 0 auto 1.5rem auto; display: flex; justify-content: center; align-items: center; }
+.modules-preview .module-card:nth-child(1) .card-icon-background { background-color: #fff3e0; }
+.modules-preview .module-card:nth-child(2) .card-icon-background { background-color: #e0f2f1; }
+.module-card img { width: 36px; height: 36px; }
+.module-card h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+.module-card p { color: var(--text-light); font-size: 0.95rem; }
+
+/* =================================================================== */
+/* ========== 5. UPLOAD PAGE STYLES ========== */
+/* =================================================================== */
+.upload-container { text-align: center; padding: 2rem 0; }
+.upload-container h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.upload-container p { color: var(--text-light); margin-bottom: 2rem; }
+.upload-form { max-width: 600px; margin: 0 auto; }
+.upload-area { border: 2px dashed var(--border-color); border-radius: 16px; padding: 3rem; margin-bottom: 2rem; transition: border-color 0.3s ease, background-color 0.3s ease; position: relative; }
+.upload-area:hover { border-color: var(--primary-color); background-color: #fcfdfd; }
+.upload-icon { width: 60px; height: 60px; opacity: 0.5; margin-bottom: 1rem; }
+#file-input { width: 100%; height: 100%; position: absolute; top: 0; left: 0; opacity: 0; cursor: pointer; }
+.browse-btn { display: inline-block; background-color: var(--text-dark); color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 500; margin-bottom: 1rem; }
+#file-name-display { display: block; color: var(--text-light); font-style: italic; }
+.btn-process { width: 100%; padding: 16px; font-size: 1.1rem; }
+
+/* =================================================================== */
+/* ========== 6. GENERAL MODULE & ANALYSIS STYLES ========== */
+/* =================================================================== */
+.module-operation-container { max-width: 800px; margin: 0 auto; text-align: center; }
+.module-operation-container h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.module-operation-container p { color: var(--text-light); margin-bottom: 0.5rem; }
+.module-operation-container p code { background-color: #f0f3f5; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; }
+.success-message { color: var(--primary-color); font-weight: 600; margin-top: 2rem; margin-bottom: 1rem !important; }
+.success-message.small-message { margin: 0; padding: 1rem; text-align: left; }
+.module-form { margin-top: 3rem; text-align: left; }
+.module-form fieldset { border: none; padding: 0; margin: 0; }
+.module-form legend { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; padding: 0; }
+.form-option { padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; flex-wrap: wrap; }
+.form-option input[type="radio"] { margin-right: 1rem; transform: scale(1.2); }
+.form-option label { font-size: 1rem; cursor: pointer; flex-grow: 1; }
+.form-input { padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; margin-left: 1rem; font-family: inherit; font-size: 1rem; }
+.small-input { max-width: 120px; }
+.form-select { padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); }
+.full-width-select { width: 100%; }
+
+/* Style for the flashed success messages */
+.flash-message { padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 8px; font-weight: 500; }
+.flash-message.success { background-color: #e0f2f1; color: #004d40; border: 1px solid #b2dfdb; }
+
+/* =================================================================== */
+/* ========== 7. SPECIFIC MODULE STYLES ========== */
+/* =================================================================== */
+
+/* --- Analysis Page --- */
+.analysis-container h1 { font-size: 2.5rem; margin-bottom: 0.5rem; text-align: center; }
+.analysis-container h1 code { font-size: 1.7rem; color: var(--primary-color); background-color: #f0f3f5; padding: 4px 8px; border-radius: 6px; }
+.analysis-container p { text-align: center; color: var(--text-light); margin-bottom: 2rem; }
+.analysis-container h2 { font-size: 1.8rem; margin-bottom: 0.5rem; text-align: center; margin-top: 1rem; }
+.analysis-layout { display: grid; grid-template-columns: 3fr 2fr; gap: 2rem; align-items: flex-start; margin-top: 2rem; }
+.data-preview-container, .stats-container { min-width: 0; }
+.data-preview-container h3, .stats-container h3 { text-align: center; margin-bottom: 1rem; font-weight: 600; }
+.table-preview { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+.table-preview table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.table-preview th, .table-preview td { padding: 12px 15px; border: 1px solid var(--border-color); text-align: left; }
+.table-preview thead th { background-color: #f8f9fa; font-weight: 600; }
+.table-preview tbody tr:nth-child(even) { background-color: #fdfdfd; }
+.stats-table { max-height: 400px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+.stats-table table { width: 100%; border-collapse: collapse; }
+.stats-table th, .stats-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; text-align: left; }
+.stats-table thead th { background-color: #f8f9fa; position: sticky; top: 0; }
+.stats-table tbody tr:last-child td { border-bottom: none; }
+.choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; }
+.choice-card { display: block; background-color: #f8f9fa; border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; text-align: center; text-decoration: none; color: var(--text-dark); transition: all 0.3s ease; }
+.choice-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--primary-color); }
+.choice-card img { height: 50px; margin-bottom: 1rem; }
+.choice-card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.choice-card p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 0; text-align: center; }
+
+/* --- Modules Selection Page --- */
+.modules-page-container { text-align: center; }
+.modules-page-container h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.modules-page-container p { color: var(--text-light); margin-bottom: 3rem; }
+.module-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+.module-select-card { display: flex; flex-direction: column; align-items: center; text-align: center; background-color: var(--container-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; text-decoration: none; color: var(--text-dark); transition: all 0.3s ease; }
+.module-select-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--primary-color); }
+.module-select-card img { height: 48px; margin-bottom: 1rem; opacity: 0.8; }
+.module-select-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.75rem; }
+.module-select-card p { font-size: 0.9rem; color: var(--text-light); margin: 0; }
+
+/* --- Missing Data & Structural Error Modules --- */
+.checkbox-option { justify-content: flex-start; }
+.checkbox-option input[type="checkbox"] { transform: scale(1.2); margin-right: 0.75rem; }
+.column-actions-table { display: flex; flex-direction: column; gap: 0.75rem; }
+.column-action-row { display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; }
+.col-name { font-weight: 500; }
+.col-options { display: flex; align-items: center; gap: 0.5rem; }
+.col-options select { flex-grow: 1; }
+.full-width-input { flex-grow: 1; }
+
+/* --- Duplicates Module --- */
+.radio-group { display: flex; flex-wrap: wrap; gap: 1rem; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 8px; }
+.radio-group input[type="radio"] { display: none; }
+.radio-group label { padding: 8px 16px; border-radius: 6px; cursor: pointer; background-color: #f8f9fa; transition: all 0.2s ease-in-out; }
+.radio-group input[type="radio"]:checked + label { background-color: var(--primary-color); color: white; font-weight: 600; }
+.column-checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; }
+
+/* --- Categorical Module --- */
+.column-fieldset { border: 1px solid var(--border-color); padding: 1.5rem; margin-bottom: 2rem; border-radius: 16px; }
+.column-fieldset legend { font-size: 1.3rem; font-weight: 600; padding: 0 0.5rem; margin-left: 1rem; }
+.column-fieldset code { color: var(--primary-color); }
+.sub-fieldset { border-top: 1px dashed var(--border-color); margin-top: 1.5rem; padding-top: 1.5rem; }
+.sub-legend { font-weight: 600; margin-bottom: 1rem; color: var(--text-light); }
+.form-description { font-size: 0.9rem; color: var(--text-light); margin-bottom: 1.5rem !important; text-align: left; }
+.mapping-table { display: flex; flex-direction: column; gap: 0.5rem; max-height: 300px; overflow-y: auto; padding-right: 1rem; }
+.mapping-header, .mapping-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; }
+.mapping-header { font-weight: 600; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); }
+.original-value { font-style: italic; color: var(--text-light); }
+
+/* --- Outliers Module (Step-by-Step) --- */
+.hidden-radio { display: none; }
+.option-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0; }
+.option-card { display: flex; flex-direction: column; align-items: center; text-align: center; background-color: #f8f9fa; border: 2px solid var(--border-color); border-radius: 16px; padding: 2rem; cursor: pointer; transition: all 0.3s ease; }
+.option-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.hidden-radio:checked + .option-card { border-color: var(--primary-color); background-color: #f0f8f7; box-shadow: var(--shadow); }
+.option-card .form-input { width: 80%; margin-top: auto; text-align: center; }
+.manual-bounds-inputs { display: flex; gap: 1rem; margin-top: 0.5rem; }
+.column-stats-summary { background-color: #fdfdfd; border-radius: 8px; padding: 1rem; margin-bottom: 2rem; }
+.column-stats-summary pre { white-space: pre-wrap; text-align: left; font-size: 0.85rem; line-height: 1.5; }
+.highlight-box { background-color: #f0f3f5; border: 1px solid var(--border-color); border-left: 5px solid var(--primary-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; text-align: left; }
+.highlight-box p { margin-bottom: 0.5rem !important; text-align: left; }
+.highlight-box p:last-child { margin-bottom: 0 !important; }
+.highlight-box code { font-size: 0.9rem; }
+
+/* --- Irrelevant Data Module --- */
+.filter-rule { border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 8px; }
+.filter-rule p { text-align: left; margin-bottom: 1rem !important; font-weight: 500; }
+.filter-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; align-items: center; }
+
+/* =================================================================== */
+/* ========== 8. FOOTER STYLES ========== */
+/* =================================================================== */
+.page-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2.5rem;
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+.footer-links { display: flex; gap: 1.5rem; }
+.footer-links a { color: var(--text-light); text-decoration: none; transition: color 0.3s ease; }
+.footer-links a:hover { color: var(--primary-color); }
+
+
+/* Styles for the pipeline results page */
+.log-box {
+    background-color: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+.log-box ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+.log-box li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.log-box li:last-child {
+    border-bottom: none;
+}
+
+.pipeline-action-item {
+    display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;
+    align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color);
+}
+.pipeline-action-item:last-child { border-bottom: none; }
+.finding-description { text-align: left; }
+.action-control { text-align: right; }
+
+/* =================================================================== */
+/* ========== 9. IMAGE & ICON CORRECTION STYLES ========== */
+/* =================================================================== */
+
+/* This targets the logo image in your header */
+.nav-logo img {
+    height: 48px; /* Force the height to be small and manageable */
+    width: 48px;  /* Force the width to be the same, making it a square */
+    
+    /* This is the magic that makes a square image appear as a perfect circle! */
+    border-radius: 50%; 
+    
+    /* This ensures the image content doesn't get stretched weirdly */
+    object-fit: cover; 
+}

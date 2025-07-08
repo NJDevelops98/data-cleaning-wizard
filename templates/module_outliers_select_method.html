@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}Handle Outliers - Step 2{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🎯 Analyzing Column: <code>{{ column_name }}</code></h2>
+    <p><strong>Step 2:</strong> Choose how to detect outliers.</p>
+    <div class="column-stats-summary"><h4>Column Statistics</h4><pre>{{ stats_description }}</pre></div>
+    <form action="{{ url_for('module_outliers_review') }}" method="post" class="module-form">
+        <input type="hidden" name="column_to_analyze" value="{{ column_name }}">
+        <fieldset><legend>Detection Method</legend>
+            <div class="option-card-grid">
+                <input type="radio" name="detect_method" id="iqr" value="iqr" class="hidden-radio" checked>
+                <label for="iqr" class="option-card"><h3>IQR Method</h3><p>Uses the Interquartile Range. A robust method suitable for most data.</p></label>
+                
+                <input type="radio" name="detect_method" id="zscore" value="zscore" class="hidden-radio">
+                <label for="zscore" class="option-card"><h3>Z-Score Method</h3><p>Uses standard deviation. Best for bell-shaped distributions.</p><input type="number" step="0.1" name="zscore_thresh" placeholder="Threshold (e.g., 3.0)" class="form-input" onclick="event.stopPropagation();"></label>
+                
+                <input type="radio" name="detect_method" id="manual" value="manual" class="hidden-radio">
+                <label for="manual" class="option-card"><h3>Manual Bounds</h3><p>You define the exact minimum and maximum valid values.</p><div class="manual-bounds-inputs"><input type="number" step="any" name="lower_bound" placeholder="Min Value" class="form-input" onclick="event.stopPropagation();"><input type="number" step="any" name="upper_bound" placeholder="Max Value" class="form-input" onclick="event.stopPropagation();"></div></label>
+            </div>
+        </fieldset>
+        <button type="submit" class="btn btn-primary btn-process">Next: Review Outliers</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Handle Outliers - Step 1{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>🎯 Handle Numeric Outliers</h2>
+    <p><strong>Step 1:</strong> Select a single numeric column to analyze for outliers.</p>
+    {% if numeric_cols %}
+    <form action="{{ url_for('module_outliers_select_method') }}" method="post" class="module-form">
+        <fieldset><legend>Available Numeric Columns</legend>
+            <select name="column_to_analyze" class="form-select full-width-select">
+                {% for col_name in numeric_cols %}<option value="{{ col_name }}">{{ col_name }}</option>{% endfor %}
+            </select>
+        </fieldset>
+        <button type="submit" class="btn btn-primary btn-process">Next: Choose Detection Method</button>
+    </form>
+    {% else %}
+        <p class="success-message">✅ No numeric columns found to analyze.</p>
+        <a href="{{ url_for('modules') }}" class="btn btn-secondary">Back to Modules</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}Analysis - {{ filename }}{% endblock %}
+
+{% block content %}
+<div class="analysis-container">
+    <h1>File Analysis: <code>{{ filename }}</code></h1>
+    <p>Your file has <strong>{{ num_rows }}</strong> rows and <strong>{{ num_cols }}</strong> columns. Here is a summary:</p>
+    <div class="analysis-layout">
+        <div class="data-preview-container">
+            <h3>Data Preview</h3>
+            <div class="table-preview">{{ table_html | safe }}</div>
+        </div>
+        <div class="stats-container">
+            <h3>Column Information</h3>
+            <div class="stats-table">
+                <table>
+                    <thead><tr><th>Column Name</th><th>Data Type</th><th>Missing Values</th></tr></thead>
+                    <tbody>
+                        {% for col in column_stats %}
+                        <tr><td>{{ col.name }}</td><td>{{ col.type }}</td><td>{{ col.missing }}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr class="section-divider">
+    <h2>How would you like to proceed?</h2>
+    <div class="choice-grid">
+        <a href="{{ url_for('pipeline_run') }}" class="choice-card">
+            <h3>🚀 Automatic Pipeline</h3>
+            <p>Let the wizard analyze and apply the best cleaning steps for you.</p>
+        </a>
+        <a href="{{ url_for('modules') }}" class="choice-card">
+            <h3>🔧 Module-wise Cleaning</h3>
+            <p>Choose and apply specific cleaning operations one by one.</p>
+        </a>
+    </div>
+    
+    <div class="export-section">
+        <hr class="section-divider">
+        <h2>Ready to Finish?</h2>
+        <p>If you are done with all your cleaning steps, proceed to the export page to download your file.</p>
+        <a href="{{ url_for('export_page') }}" class="btn btn-primary btn-process">Proceed to Export</a>
+    </div>
+</div>
+{% endblock %}

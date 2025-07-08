@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}Handle Duplicates - Data Cleaning Wizard{% endblock %}
+
+{% block content %}
+<div class="module-operation-container">
+    <h2>📋 Handle Duplicates</h2>
+    
+    <form action="{{ url_for('module_duplicates_action') }}" method="post" class="module-form">
+        <!-- Part 1: Full Row Duplicates -->
+        <fieldset>
+            <legend>Part 1: Full Row Duplicates</legend>
+            {% if full_duplicate_count > 0 %}
+                <p class="form-description">Found <strong>{{ full_duplicate_count }}</strong> fully duplicate row(s). How should they be handled?</p>
+                <div class="form-option radio-group">
+                    <input type="radio" id="full_keep_first" name="full_duplicate_action" value="keep_first" checked>
+                    <label for="full_keep_first">Keep First Occurrence</label>
+                    <input type="radio" id="full_keep_last" name="full_duplicate_action" value="keep_last">
+                    <label for="full_keep_last">Keep Last Occurrence</label>
+                    <input type="radio" id="full_drop_all" name="full_duplicate_action" value="drop_all">
+                    <label for="full_drop_all">Drop All Occurrences</label>
+                    <input type="radio" id="full_skip" name="full_duplicate_action" value="skip">
+                    <label for="full_skip">Skip</label>
+                </div>
+            {% else %}
+                <p class="success-message small-message">✅ No fully duplicate rows found.</p>
+            {% endif %}
+        </fieldset>
+
+        <hr class="section-divider">
+
+        <!-- Part 2: Duplicates on Specific Columns -->
+        <fieldset>
+            <legend>Part 2: Duplicates on Specific Columns</legend>
+            <p class="form-description">Optionally, select key columns to check for duplicates. This runs after Part 1.</p>
+            <div class="column-checkbox-grid">
+                {% for col in all_columns %}
+                <div class="checkbox-option">
+                    <input type="checkbox" name="key_columns" value="{{ col }}" id="col-{{ col }}">
+                    <label for="col-{{ col }}">{{ col }}</label>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-option radio-group" style="margin-top: 1rem;">
+                <input type="radio" id="partial_keep_first" name="partial_duplicate_action" value="keep_first" checked>
+                <label for="partial_keep_first">Keep First Occurrence</label>
+                <input type="radio" id="partial_keep_last" name="partial_duplicate_action" value="keep_last">
+                <label for="partial_keep_last">Keep Last Occurrence</label>
+                <input type="radio" id="partial_drop_all" name="partial_duplicate_action" value="drop_all">
+                <label for="partial_drop_all">Drop All Occurrences</label>
+            </div>
+        </fieldset>
+        
+        <button type="submit" class="btn btn-primary btn-process">Apply All Changes</button>
+    </form>
+</div>
+{% endblock %}
