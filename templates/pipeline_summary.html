@@ -10,7 +10,10 @@
     <div class="log-box">
         <ul>
             {% for finding in findings %}
-                <li>{{ finding.description }}</li>
+                <li>
+                    {{ finding.description }} 
+                    <strong style="color: var(--primary-color);">(Recommended: {{ finding.recommendation }})</strong>
+                </li>
             {% endfor %}
         </ul>
     </div>

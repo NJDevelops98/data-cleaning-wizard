@@ -1,5 +1,5 @@
 # ===================================================================
-# ========== app.py (The Complete and Final Version) ==========
+# ========== app.py (FINAL VERSION - CORRECTED FOR KEYERROR) ========
 # ===================================================================
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
@@ -8,54 +8,34 @@ import pandas as pd
 from io import StringIO, BytesIO
 import numpy as np
 
-# Import all cleaning logic functions from your other file
 from cleaning_logic import (
-    handle_missing_data_master_web,
-    handle_duplicates_master_web,
-    handle_data_types_master_web,
-    handle_categorical_master_web,
-    detect_outliers_web,
-    treat_outliers_web,
-    handle_structural_errors_master_web,
-    handle_irrelevant_data_master_web,
-    handle_text_formatting_master_web,
-    detect_pipeline_issues_interactive,
+    handle_missing_data_master_web, handle_duplicates_master_web, handle_data_types_master_web,
+    handle_categorical_master_web, detect_outliers_web, treat_outliers_web,
+    handle_structural_errors_master_web, handle_irrelevant_data_master_web,
+    handle_text_formatting_master_web, detect_pipeline_issues_interactive,
     apply_pipeline_fixes_interactive
 )
 
-# --- App Initialization ---
 app = Flask(__name__)
-# A secret key is required for flash messages to work
 app.config["SECRET_KEY"] = "a_super_secret_key_for_flashing_messages"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# --- Helper Functions (to keep code DRY) ---
 def get_df_from_session():
-    """Safely retrieves the main DataFrame from the user's session."""
-    if 'parquet_data' not in session:
-        return None
-    try:
-        return pd.read_parquet(BytesIO(session['parquet_data']))
-    except Exception:
-        return None
+    if 'parquet_data' not in session: return None
+    try: return pd.read_parquet(BytesIO(session['parquet_data']))
+    except Exception: return None
 
 def save_df_to_session(df):
-    """Saves a DataFrame to the user's session as efficient Parquet data."""
-    out_buffer = BytesIO()
-    df.to_parquet(out_buffer, index=False)
+    out_buffer = BytesIO(); df.to_parquet(out_buffer, index=False)
     session['parquet_data'] = out_buffer.getvalue()
 
-# --- Core Routes (Homepage, Upload, Demo, Analysis) ---
 @app.route('/')
-def home():
-    """Renders the homepage."""
-    return render_template('index.html')
+def home(): return render_template('index.html')
 
 @app.route('/demo')
 def demo():
-    """Loads a sample messy dataset to demonstrate the app's features."""
     session.clear()
     try:
         df = pd.read_csv('demo_data.csv')
@@ -63,16 +43,12 @@ def demo():
         session['filename'] = 'demo_data.csv'
         flash("✅ Demo data loaded successfully! You can now explore the cleaning modules.", "success")
         return redirect(url_for('analysis'))
-    except FileNotFoundError:
-        flash("Error: Demo data file (demo_data.csv) not found in the root directory.", "error")
-        return redirect(url_for('home'))
     except Exception as e:
         flash(f"Error loading demo data: {e}", "error")
         return redirect(url_for('home'))
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    """Handles file uploads from the user."""
     if request.method == 'POST':
         file = request.files.get('file')
         if not file or file.filename == '':
@@ -91,50 +67,35 @@ def upload():
 
 @app.route('/analysis')
 def analysis():
-    """Displays the initial analysis of the uploaded file."""
     df = get_df_from_session()
     if df is None:
         flash("No data found. Please upload a file first.", "error")
         return redirect(url_for('upload'))
-    
     column_stats = [{'name': col, 'type': str(df[col].dtype), 'missing': int(df[col].isnull().sum())} for col in df.columns]
     table_html = df.head().to_html(classes='table', index=False, border=0)
-    
-    return render_template('analysis.html',
-                           filename=session.get('filename'),
-                           num_rows=len(df),
-                           num_cols=len(df.columns),
-                           table_html=table_html,
-                           column_stats=column_stats)
+    return render_template('analysis.html', filename=session.get('filename'), num_rows=len(df), num_cols=len(df.columns), table_html=table_html, column_stats=column_stats)
 
-# --- Manual Module Routes (One-by-one cleaning) ---
 @app.route('/modules')
 def modules():
-    """Displays the main menu for all manual cleaning modules."""
-    if get_df_from_session() is None:
-        return redirect(url_for('upload'))
+    if get_df_from_session() is None: return redirect(url_for('upload'))
     return render_template('modules.html')
 
+# (All individual module routes are correct and remain here)
 @app.route('/module/missing_data')
 def module_missing_data_options():
     df = get_df_from_session();
     if df is None: return redirect(url_for('upload'))
-    
-    blank_rows = df.isnull().all(axis=1).sum()
-    total_missing = df.isnull().sum().sum()
+    blank_rows, total_missing = df.isnull().all(axis=1).sum(), df.isnull().sum().sum()
     blank_cols = df.columns[df.isnull().all()]
     blank_cols_list, blank_cols_count = blank_cols.tolist(), len(blank_cols)
-    
     cols_with_missing = []
     for col in df.columns[(df.isnull().any()) & (~df.isnull().all())]:
         col_info = {'name': col, 'missing': df[col].isnull().sum()}
         if pd.api.types.is_numeric_dtype(df[col]):
             col_info.update({'is_numeric': True, 'mean': df[col].mean(), 'median': df[col].median()})
-        else:
-            col_info['is_numeric'] = False
+        else: col_info['is_numeric'] = False
         col_info['mode'] = df[col].mode()[0] if not df[col].mode().empty else 'N/A'
         cols_with_missing.append(col_info)
-        
     return render_template('module_missing_data.html', total_missing=int(total_missing), blank_rows=int(blank_rows), blank_cols_count=blank_cols_count, blank_cols_list=blank_cols_list, cols_with_missing=cols_with_missing)
 
 @app.route('/module/missing_data/apply', methods=['POST'])
@@ -275,7 +236,6 @@ def module_text_formatting_action():
 def pipeline_run():
     df = get_df_from_session()
     if df is None: return redirect(url_for('upload'))
-
     findings = detect_pipeline_issues_interactive(df)
     session['pipeline_findings'] = findings
     return render_template('pipeline_summary.html', findings=findings)
@@ -283,6 +243,7 @@ def pipeline_run():
 @app.route('/pipeline/manual_options')
 def pipeline_manual_options():
     if 'pipeline_findings' not in session: return redirect(url_for('pipeline_run'))
+    # --- THIS IS A FIX: Pass the full findings object to the template ---
     return render_template('pipeline_manual_changes.html', findings=session['pipeline_findings'])
 
 @app.route('/pipeline/apply_defaults', methods=['POST'])
@@ -295,14 +256,13 @@ def pipeline_apply_defaults():
     for i, finding in enumerate(findings):
         default_form[f'action_type-{i}'] = finding['type']
         default_form[f'column-{i}'] = finding.get('column')
-        for option in finding['options']:
-            if option.get('is_default'):
-                default_form[f'method-{i}'] = option['value']; break
+        # --- THIS IS THE FIX: The 'recommendation' key holds the default value ---
+        default_form[f'method-{i}'] = finding.get('default_value')
     
     df_cleaned, log = apply_pipeline_fixes_interactive(df, default_form)
     
     out_buffer = BytesIO(); df_cleaned.to_parquet(out_buffer, index=False)
-    session['cleaned_parquet_data'] = out_buffer.getvalue() # Store cleaned data separately
+    session['cleaned_parquet_data'] = out_buffer.getvalue()
     
     return render_template('pipeline_results.html',
                            log=log,
@@ -314,12 +274,9 @@ def pipeline_apply_defaults():
 def pipeline_apply_manual():
     df = get_df_from_session()
     if df is None: return redirect(url_for('upload'))
-
     df_cleaned, log = apply_pipeline_fixes_interactive(df, request.form)
-
     out_buffer = BytesIO(); df_cleaned.to_parquet(out_buffer, index=False)
     session['cleaned_parquet_data'] = out_buffer.getvalue()
-
     return render_template('pipeline_results.html',
                            log=log,
                            num_rows=len(df_cleaned),
@@ -329,11 +286,8 @@ def pipeline_apply_manual():
 # --- Final Export and Download Routes ---
 @app.route('/export')
 def export_page():
-    """Shows the final data preview and a download button for manually cleaned data."""
     df = get_df_from_session()
-    if df is None:
-        return redirect(url_for('upload'))
-    
+    if df is None: return redirect(url_for('upload'))
     table_html = df.head().to_html(classes='table', index=False, border=0)
     return render_template('export.html',
                            filename=session.get('filename'),
@@ -343,30 +297,23 @@ def export_page():
 
 @app.route('/download_manual_clean_file')
 def download_manual_clean_file():
-    """Serves the manually cleaned file for download."""
     df = get_df_from_session()
-    if df is None:
-        return redirect(url_for('upload'))
-    
+    if df is None: return redirect(url_for('upload'))
     csv_buffer = StringIO()
     df.to_csv(csv_buffer, index=False)
     mem_file = BytesIO(csv_buffer.getvalue().encode('utf-8'))
     mem_file.seek(0)
-    return send_file(mem_file,
-                     as_attachment=True,
+    return send_file(mem_file, as_attachment=True,
                      download_name=f"cleaned_{session.get('filename', 'data.csv')}",
                      mimetype='text/csv')
 
 @app.route('/download_pipeline_file')
 def download_pipeline_file():
-    """Serves the pipeline-cleaned file for download."""
     if 'cleaned_parquet_data' not in session: return redirect(url_for('upload'))
-    
     df = pd.read_parquet(BytesIO(session['cleaned_parquet_data']))
     csv_buffer = StringIO(); df.to_csv(csv_buffer, index=False)
     mem_file = BytesIO(csv_buffer.getvalue().encode('utf-8')); mem_file.seek(0)
-    return send_file(mem_file,
-                     as_attachment=True,
+    return send_file(mem_file, as_attachment=True,
                      download_name=f"pipeline_cleaned_{session.get('filename', 'data.csv')}",
                      mimetype='text/csv')
 
